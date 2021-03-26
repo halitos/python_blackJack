@@ -40,25 +40,31 @@ def play():
     playerRandomCards = getRandom2Cards()
     is_over = False
 
-    # add card numbers to counters
-    dealerCount = sum(dealerRandomCards)
-    playerCount = sum(playerRandomCards)
+    def sumScores(cardsInHand):
+        # if sum(cards) == 21 and len(cards) == 2:
+        #     return 0
+
+        if 11 in cardsInHand and sum(cards) > 21:
+            cardsInHand.remove(11)
+            cardsInHand.append(1)
+
+        return sum(cardsInHand)
 
     check = input(
-        f"Your cards are {playerRandomCards}, total: {playerCount}\n"
-        f"Dealer's card are {dealerRandomCards}, total: {dealerCount}\n"
+        f"Your cards are {playerRandomCards}, total: {sumScores(playerRandomCards)}\n"
+        f"Dealer's card are {dealerRandomCards}, total: {sumScores(dealerRandomCards)}\n"
         f"Do you want another card?\n y/n\n")
 
     # More cards y/n?
 
     if check == "y":
         playerRandomCards.append(getRandomCard())
-        playerCount += playerRandomCards[-1]
-        print(f"Your cards are {playerRandomCards} and total:{playerCount}")
-        announce(playerCount, dealerCount)
+        print(
+            f"Your cards are {playerRandomCards} and total:{sumScores(playerRandomCards)}")
+        announce(sumScores(playerRandomCards), sumScores(dealerRandomCards))
 
     if check == "n":
-        announce(playerCount, dealerCount)
+        announce(sumScores(playerRandomCards), sumScores(dealerRandomCards))
 
 
 while input("BLACKJACK!  - Start a new game y/n?\n") == "y":
